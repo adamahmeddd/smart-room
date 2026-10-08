@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Adam's Room</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300;400&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#080c18;
+  --c1:#0f1525;
+  --c2:#141b2e;
+  --c3:#1a2240;
+  --blue:#6b8cff;
+  --blue2:#a0b8ff;
+  --glow:rgba(107,140,255,0.22);
+  --glowS:rgba(107,140,255,0.1);
+  --border:rgba(107,140,255,0.13);
+  --borderH:rgba(107,140,255,0.3);
+  --text:#cdd8ff;
+  --textD:rgba(180,200,255,0.35);
+  --teal:#5ecfcf;
+  --rose:#ff7eb3;
+  --amber:#ffb86c;
+}
+body{
+  background:var(--bg);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  min-height:100vh;
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:2rem 1rem 5rem;
+  color:var(--text);
+}
+
+/* ── BG ── */
+.bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbDrift 18s ease-in-out infinite alternate;}
+.bg-orb:nth-child(1){width:500px;height:500px;top:-150px;left:-150px;background:rgba(60,80,180,0.09);}
+.bg-orb:nth-child(2){width:400px;height:400px;bottom:-100px;right:-100px;background:rgba(80,50,160,0.07);animation-delay:-6s;}
+.bg-orb:nth-child(3){width:300px;height:300px;top:40%;left:55%;background:rgba(40,120,180,0.06);animation-delay:-12s;}
+@keyframes orbDrift{from{transform:scale(1)translate(0,0);}to{transform:scale(1.1)translate(20px,-20px);}}
+
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d) var(--dl) infinite ease-in-out;}
+@keyframes twinkle{0%,100%{opacity:.1;}50%{opacity:.65;}}
+
+/* ── WRAPPER ── */
+.app{position:relative;z-index:1;width:100%;max-width:400px;}
+
+/* ── HEADER ── */
+.app-header{
+  text-align:center;
+  padding:1.5rem 0 1.2rem;
+}
+.app-title{
+  font-family:'Gowun Batang',serif;
+  font-size:1.4rem;
+  letter-spacing:.12em;
+  color:var(--blue2);
+  margin-bottom:.2rem;
+}
+.app-sub{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--textD);}
+
+/* ── CONNECT BANNER ── */
+#connectBanner{
+  background:linear-gradient(135deg,rgba(107,140,255,.08),rgba(94,207,207,.05));
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:1.1rem 1.3rem;
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.2rem;
+  cursor:pointer;
+  transition:all .25s;
+}
+#connectBanner:hover{border-color:var(--borderH);background:rgba(107,140,255,.12);}
+#connectBanner.connected{background:rgba(94,207,207,.07);border-color:rgba(94,207,207,.25);cursor:default;}
+.bt-dot{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(107,140,255,.12);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+  transition:all .25s;
+}
+#connectBanner.connected .bt-dot{background:rgba(94,207,207,.15);border-color:rgba(94,207,207,.35);}
+.bt-info{flex:1;}
+.bt-label{font-size:.78rem;font-weight:400;color:var(--text);}
+.bt-status{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--textD);margin-top:2px;}
+.bt-arrow{font-size:.9rem;color:var(--textD);transition:color .2s;}
+#connectBanner:hover .bt-arrow{color:var(--blue2);}
+#connectBanner.connected .bt-arrow{display:none;}
+
+/* ── SECTIONS GRID ── */
+.sections{display:flex;flex-direction:column;gap:1rem;}
+
+/* ── LAMP SECTION ── */
+.lamp-card{
+  background:var(--c1);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.lamp-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,184,108,.08) 0%,transparent 70%);
+  transition:all .5s;pointer-events:none;
+}
+.lamp-card.lamp-on::before{background:radial-gradient(circle,rgba(255,184,108,.18) 0%,transparent 70%);}
+
+.lamp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+.lamp-label{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--textD);}
+
+/* filament bulb */
+.bulb-wrap{display:flex;justify-content:center;margin-bottom:1rem;}
+.bulb{
+  position:relative;width:64px;height:64px;
+  cursor:pointer;
+}
+.bulb-svg{width:64px;height:64px;transition:all .4s;}
+.bulb-glow{
+  position:absolute;inset:-20px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,200,80,.0) 30%,transparent 70%);
+  transition:all .5s;pointer-events:none;
+}
+.lamp-on .bulb-glow{background:radial-gradient(circle,rgba(255,200,80,.25) 30%,transparent 70%);}
+
+/* toggle pill */
+.lamp-toggle{
+  display:flex;align-items:center;gap:.7rem;justify-content:center;
+}
+.toggle-track{
+  width:50px;height:26px;border-radius:13px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  position:relative;cursor:pointer;transition:all .3s;
+}
+.lamp-on .toggle-track{background:rgba(255,184,108,.2);border-color:rgba(255,184,108,.4);}
+.toggle-thumb{
+  position:absolute;top:3px;left:3px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--textD);transition:all .3s;
+}
+.lamp-on .toggle-thumb{background:var(--amber);transform:translateX(24px);}
+.toggle-state{font-size:.7rem;letter-spacing:.12em;color:var(--textD);min-width:24px;}
+.lamp-on .toggle-state{color:var(--amber);}
+
+/* ── TIMER SECTION ── */
+.timer-card{
+  background:var(--c1);border:1px solid var(--border);border-radius:22px;padding:1.4rem;
+}
+.sec-head{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;}
+.sec-icon{font-size:.95rem;}
+.sec-title{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--textD);}
+
+.time-display{
+  display:flex;align-items:center;justify-content:center;gap:.3rem;
+  background:rgba(0,0,0,.25);border:1px solid rgba(107,140,255,.08);
+  border-radius:14px;padding:.85rem .5rem;margin-bottom:1rem;
+}
+.time-seg{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.time-seg input{
+  width:52px;height:44px;
+  background:transparent;border:none;
+  color:var(--blue2);text-align:center;
+  font-family:'Gowun Batang',serif;font-size:1.6rem;
+  outline:none;
+}
+.time-seg input:focus{color:white;}
+.time-seg span{font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--textD);}
+.time-colon{font-family:'Gowun Batang',serif;font-size:1.6rem;color:rgba(107,140,255,.4);margin-bottom:14px;}
+
+.timer-btns{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.t-btn{
+  padding:.7rem;border-radius:11px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--textD);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:300;
+  letter-spacing:.12em;text-transform:uppercase;
+  transition:all .2s;outline:none;
+}
+.t-btn:hover{border-color:var(--borderH);color:var(--blue2);background:rgba(107,140,255,.07);}
+.t-btn:active{transform:scale(.97);}
+
+/* ── BUZZER SECTION ── */
+.buzzer-card{
+  background:var(--c1);border:1px solid var(--border);border-radius:22px;padding:1.4rem;
+}
+.buz-wave-wrap{
+  display:flex;justify-content:center;align-items:center;gap:3px;
+  margin:0.7rem 0 1rem;height:36px;
+}
+.buz-bar{
+  width:4px;border-radius:2px;background:var(--teal);
+  opacity:.3;
+  animation:wave 1.2s ease-in-out infinite;
+}
+.buz-active .buz-bar{opacity:1;}
+.buz-bar:nth-child(1){height:12px;animation-delay:0s;}
+.buz-bar:nth-child(2){height:22px;animation-delay:.1s;}
+.buz-bar:nth-child(3){height:30px;animation-delay:.2s;}
+.buz-bar:nth-child(4){height:36px;animation-delay:.3s;}
+.buz-bar:nth-child(5){height:30px;animation-delay:.4s;}
+.buz-bar:nth-child(6){height:22px;animation-delay:.5s;}
+.buz-bar:nth-child(7){height:12px;animation-delay:.6s;}
+@keyframes wave{0%,100%{transform:scaleY(1);}50%{transform:scaleY(.5);}}
+
+.buz-btns{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.buz-btn{
+  padding:.7rem;border-radius:11px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--textD);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:300;
+  letter-spacing:.12em;text-transform:uppercase;
+  transition:all .2s;outline:none;
+}
+.buz-btn:hover{border-color:rgba(94,207,207,.35);color:var(--teal);background:rgba(94,207,207,.07);}
+.buz-btn:active{transform:scale(.97);}
+.buz-btn.on{border-color:rgba(94,207,207,.3);color:var(--teal);background:rgba(94,207,207,.08);}
+
+/* ── ALARM SECTION ── */
+.alarm-card{
+  background:var(--c1);border:1px solid var(--border);border-radius:22px;padding:1.4rem;
+}
+.alarm-clock-wrap{display:flex;justify-content:center;margin:.5rem 0 1rem;}
+.alarm-clock{
+  position:relative;width:72px;height:72px;
+}
+.clock-face{
+  width:72px;height:72px;border-radius:50%;
+  border:2px solid rgba(255,126,179,.25);
+  background:rgba(255,126,179,.04);
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.clock-armed .clock-face{
+  border-color:rgba(255,126,179,.5);
+  box-shadow:0 0 18px rgba(255,126,179,.18);
+}
+.clock-hand{
+  position:absolute;bottom:50%;left:50%;
+  transform-origin:bottom center;
+  background:rgba(255,126,179,.6);border-radius:2px;
+  animation:tick 6s steps(60,end) infinite;
+}
+@keyframes tick{from{transform:translateX(-50%) rotate(0deg);}to{transform:translateX(-50%) rotate(360deg);}}
+.hand-s{width:1.5px;height:26px;animation-duration:6s;}
+.hand-m{width:2px;height:20px;background:rgba(255,126,179,.8);animation-duration:360s;}
+.clock-center{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--rose);top:50%;left:50%;transform:translate(-50%,-50%);}
+.alarm-bells{position:absolute;top:-4px;left:8px;right:8px;display:flex;justify-content:space-between;}
+.bell{width:8px;height:8px;border-radius:50%;background:rgba(255,126,179,.35);border:1px solid rgba(255,126,179,.4);}
+.clock-armed .bell{background:rgba(255,126,179,.7);}
+
+.alarm-time{
+  display:flex;align-items:center;justify-content:center;gap:.3rem;
+  background:rgba(0,0,0,.2);border:1px solid rgba(255,126,179,.08);
+  border-radius:14px;padding:.75rem .5rem;margin-bottom:.85rem;
+}
+.alarm-time input{
+  width:52px;height:40px;background:transparent;border:none;
+  color:var(--rose);text-align:center;
+  font-family:'Gowun Batang',serif;font-size:1.5rem;
+  outline:none;
+}
+.alarm-colon{font-family:'Gowun Batang',serif;font-size:1.5rem;color:rgba(255,126,179,.3);margin-bottom:12px;}
+
+.arm-btn{
+  width:100%;padding:.8rem;border-radius:11px;
+  border:1px solid rgba(255,126,179,.2);background:rgba(255,126,179,.05);
+  color:rgba(255,126,179,.6);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:300;
+  letter-spacing:.18em;text-transform:uppercase;
+  transition:all .25s;outline:none;
+}
+.arm-btn:hover{border-color:rgba(255,126,179,.4);color:var(--rose);background:rgba(255,126,179,.1);}
+.arm-btn.armed{border-color:rgba(255,126,179,.45);color:var(--rose);background:rgba(255,126,179,.12);}
+
+/* ── TV REMOTE SECTION ── */
+.remote-card{
+  background:var(--c1);border:1px solid var(--border);border-radius:22px;padding:1.4rem;
+}
+.remote-outer{
+  background:linear-gradient(160deg,#141e35 0%,#0e1628 100%);
+  border:1px solid rgba(107,140,255,.15);
+  border-radius:32px;
+  padding:1.4rem 1.1rem 1.6rem;
+  max-width:200px;
+  margin:0 auto;
+  box-shadow:0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+  position:relative;
+}
+/* notch at top */
+.remote-notch{
+  width:40px;height:5px;border-radius:3px;
+  background:rgba(255,255,255,.06);
+  margin:0 auto 1.2rem;
+}
+/* ir dot */
+.remote-ir{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,120,80,.5);
+  box-shadow:0 0 8px rgba(255,120,80,.4);
+  margin:0 auto .9rem;
+}
+
+/* screen area */
+.remote-screen{
+  background:rgba(0,0,0,.35);border:1px solid rgba(107,140,255,.1);
+  border-radius:10px;padding:.5rem .6rem;
+  text-align:center;margin-bottom:1.1rem;
+  min-height:32px;
+  font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--textD);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* vol cluster */
+.vol-cluster{
+  display:flex;flex-direction:column;align-items:center;gap:.45rem;
+  margin-bottom:1rem;
+}
+.vol-label{font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--textD);}
+.vol-pair{display:flex;gap:.5rem;}
+.vol-btn{
+  width:60px;height:36px;border-radius:10px;
+  border:1px solid rgba(107,140,255,.18);
+  background:rgba(107,140,255,.06);
+  color:var(--blue2);cursor:pointer;
+  font-size:1.1rem;font-family:'DM Sans',sans-serif;
+  transition:all .18s;outline:none;
+  display:flex;align-items:center;justify-content:center;
+  user-select:none;
+}
+.vol-btn:hover{background:rgba(107,140,255,.14);border-color:rgba(107,140,255,.35);}
+.vol-btn:active{transform:scale(.94);background:rgba(107,140,255,.2);}
+
+.remote-divider{height:1px;background:rgba(107,140,255,.08);margin:.85rem 0;}
+
+/* open/close big pill */
+.oc-btn{
+  display:block;width:100%;padding:.65rem;
+  border-radius:10px;
+  border:1px solid rgba(107,140,255,.18);
+  background:rgba(107,140,255,.07);
+  color:var(--blue2);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:300;
+  letter-spacing:.18em;text-transform:uppercase;
+  transition:all .2s;outline:none;
+  text-align:center;
+}
+.oc-btn:hover{border-color:rgba(107,140,255,.38);background:rgba(107,140,255,.13);}
+.oc-btn:active{transform:scale(.97);}
+
+/* remote power dot row */
+.remote-dots{display:flex;justify-content:center;gap:6px;margin-top:1rem;}
+.r-dot{width:7px;height:7px;border-radius:50%;background:rgba(107,140,255,.12);border:1px solid rgba(107,140,255,.15);}
+.r-dot:nth-child(2){background:rgba(107,140,255,.22);}
+
+/* ── STATUS BAR ── */
+.status-bar{
+  text-align:center;
+  font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--textD);margin-top:1.2rem;
+  min-height:16px;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-fx" id="bgfx">
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+</div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="app-title">Adam's Room</div>
+    <div class="app-sub">ambient control</div>
+  </div>
+
+  <!-- CONNECT BANNER — lives inline at top -->
+  <div id="connectBanner" onclick="handleConnect()">
+    <div class="bt-dot" id="btDot">⌁</div>
+    <div class="bt-info">
+      <div class="bt-label" id="btLabel">Connect device</div>
+      <div class="bt-status" id="btStatus">tap to initialize bluetooth</div>
+    </div>
+    <div class="bt-arrow" id="btArrow">›</div>
+  </div>
+
+  <div class="sections">
+
+    <!-- ── LAMP ── -->
+    <div class="lamp-card" id="lampCard">
+      <div class="lamp-top">
+        <div class="lamp-label">Lamp</div>
+      </div>
+      <div class="bulb-wrap">
+        <div class="bulb" onclick="toggleLamp()" title="Toggle lamp">
+          <div class="bulb-glow"></div>
+          <svg class="bulb-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- bulb glass -->
+            <path d="M32 8 C18 8 10 18 10 28 C10 36 15 42 22 45 L22 52 L42 52 L42 45 C49 42 54 36 54 28 C54 18 46 8 32 8Z"
+              fill="rgba(255,200,80,0.07)" stroke="rgba(255,200,80,0.3)" stroke-width="1.2"/>
+            <!-- filaments -->
+            <path d="M26 34 L28 26 L30 32 L32 24 L34 32 L36 26 L38 34"
+              stroke="rgba(255,200,80,0.5)" stroke-width="1" fill="none" stroke-linecap="round" id="filament"/>
+            <!-- base rings -->
+            <rect x="22" y="52" width="20" height="3" rx="1.5" fill="rgba(200,180,120,0.2)" stroke="rgba(255,200,80,0.25)" stroke-width=".8"/>
+            <rect x="23" y="55" width="18" height="3" rx="1.5" fill="rgba(200,180,120,0.15)" stroke="rgba(255,200,80,0.2)" stroke-width=".8"/>
+            <rect x="25" y="58" width="14" height="3" rx="1.5" fill="rgba(200,180,120,0.1)" stroke="rgba(255,200,80,0.15)" stroke-width=".8"/>
+          </svg>
+        </div>
+      </div>
+      <div class="lamp-toggle" onclick="toggleLamp()">
+        <div class="toggle-track" id="toggleTrack">
+          <div class="toggle-thumb"></div>
+        </div>
+        <div class="toggle-state" id="toggleState">Off</div>
+      </div>
+    </div>
+
+    <!-- ── TIMER ── -->
+    <div class="timer-card">
+      <div class="sec-head">
+        <span class="sec-icon">⏳</span>
+        <span class="sec-title">Timer</span>
+      </div>
+      <div class="time-display">
+        <div class="time-seg">
+          <input type="number" id="hh" value="0" min="0">
+          <span>hrs</span>
+        </div>
+        <div class="time-colon">:</div>
+        <div class="time-seg">
+          <input type="number" id="mm" value="0" min="0" max="59">
+          <span>min</span>
+        </div>
+        <div class="time-colon">:</div>
+        <div class="time-seg">
+          <input type="number" id="ss" value="0" min="0" max="59">
+          <span>sec</span>
+        </div>
+      </div>
+      <div class="timer-btns">
+        <button class="t-btn" onclick="setTimer('ON')">Turn on after</button>
+        <button class="t-btn" onclick="setTimer('OFF')">Turn off after</button>
+      </div>
+    </div>
+
+    <!-- ── BUZZER ── -->
+    <div class="buzzer-card" id="buzCard">
+      <div class="sec-head">
+        <span class="sec-icon">〰</span>
+        <span class="sec-title">Buzzer</span>
+      </div>
+      <div class="buz-wave-wrap" id="buzWave">
+        <div class="buz-bar"></div>
+        <div class="buz-bar"></div>
+        <div class="buz-bar"></div>
+        <div class="buz-bar"></div>
+        <div class="buz-bar"></div>
+        <div class="buz-bar"></div>
+        <div class="buz-bar"></div>
+      </div>
+      <div class="buz-btns">
+        <button class="buz-btn on" id="buzToggle" onclick="toggleBuzzer()">Buzzer on</button>
+        <button class="buz-btn" onclick="testBuzzer()">Test tone</button>
+      </div>
+    </div>
+
+    <!-- ── ALARM ── -->
+    <div class="alarm-card">
+      <div class="sec-head">
+        <span class="sec-icon">🔔</span>
+        <span class="sec-title">Alarm</span>
+      </div>
+      <div class="alarm-clock-wrap">
+        <div class="alarm-clock" id="alarmClock">
+          <div class="clock-face">
+            <div class="alarm-bells">
+              <div class="bell"></div>
+              <div class="bell"></div>
+            </div>
+            <div class="clock-hand hand-m" id="handM"></div>
+            <div class="clock-hand hand-s" id="handS"></div>
+            <div class="clock-center"></div>
+          </div>
+        </div>
+      </div>
+      <div class="alarm-time">
+        <div class="time-seg">
+          <input type="number" id="ahh" value="0" min="0">
+          <span style="font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--textD);">hrs</span>
+        </div>
+        <div class="alarm-colon">:</div>
+        <div class="time-seg">
+          <input type="number" id="amm" value="0" min="0" max="59">
+          <span style="font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--textD);">min</span>
+        </div>
+        <div class="alarm-colon">:</div>
+        <div class="time-seg">
+          <input type="number" id="ass" value="0" min="0" max="59">
+          <span style="font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--textD);">sec</span>
+        </div>
+      </div>
+      <button class="arm-btn" id="armBtn" onclick="armAlarm()">Arm alarm</button>
+      <button class="arm-btn" style="margin-top:.6rem" onclick="stopAlarm()">Stop alarm</button>
+    </div>
+
+    <!-- ── TV REMOTE ── -->
+    <div class="remote-card">
+      <div class="sec-head">
+        <span class="sec-icon">📺</span>
+        <span class="sec-title">TV Remote</span>
+      </div>
+
+      <div class="remote-outer">
+        <div class="remote-notch"></div>
+        <div class="remote-ir"></div>
+
+        <div class="remote-screen" id="remoteScreen">TV Ready</div>
+
+        <div class="vol-cluster">
+          <div class="vol-label">Volume</div>
+          <div class="vol-pair">
+            <button class="vol-btn"
+              onpointerdown="tvHoldStart('UP')"
+              onpointerup="tvHoldStop()"
+              onpointercancel="tvHoldStop()"
+              onpointerleave="tvHoldStop()">＋</button>
+            <button class="vol-btn"
+              onpointerdown="tvHoldStart('DOWN')"
+              onpointerup="tvHoldStop()"
+              onpointercancel="tvHoldStop()"
+              onpointerleave="tvHoldStop()">－</button>
+          </div>
+        </div>
+
+        <div class="remote-divider"></div>
+
+        <button class="oc-btn" onclick="tvSend('OC')">Open / Close</button>
+
+        <div class="remote-dots">
+          <div class="r-dot"></div>
+          <div class="r-dot"></div>
+          <div class="r-dot"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end sections -->
+
+  <div class="status-bar" id="statusBar">System idle</div>
+
+</div><!-- end app -->
+
+<script>
+// stars
+const bgfx = document.getElementById('bgfx');
+for(let i=0;i<80;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  const sz=Math.random()*1.8+.4;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;`;
+  s.style.setProperty('--d',(2+Math.random()*5)+'s');
+  s.style.setProperty('--dl',(Math.random()*4)+'s');
+  bgfx.appendChild(s);
+}
+
+let btChar=null, isOn=true, buzzerEnabledUI=true;
+
+function setStatus(msg){document.getElementById('statusBar').innerText=msg;}
+
+// CONNECT
+async function handleConnect(){
+  const banner=document.getElementById('connectBanner');
+  if(banner.classList.contains('connected'))return;
+  const serviceUuid="0000ffe0-0000-1000-8000-00805f9b34fb";
+  const charUuid="0000ffe1-0000-1000-8000-00805f9b34fb";
+  try{
+    document.getElementById('btStatus').innerText='connecting…';
+    const device=await navigator.bluetooth.requestDevice({filters:[{services:[serviceUuid]}]});
+    const server=await device.gatt.connect();
+    const service=await server.getPrimaryService(serviceUuid);
+    btChar=await service.getCharacteristic(charUuid);
+    try{
+      await btChar.startNotifications();
+      btChar.addEventListener('characteristicvaluechanged',(e)=>{
+        const val=new TextDecoder().decode(e.target.value).trim();
+        if(val==="STATE:1")updateLampUI(true);
+        if(val==="STATE:0")updateLampUI(false);
+        if(val==="BUZ:1"){buzzerEnabledUI=true;updateBuzUI();}
+        if(val==="BUZ:0"){buzzerEnabledUI=false;updateBuzUI();}
+        if(val==="BUZALARM:ARMED"){setStatus('Alarm armed');document.getElementById('armBtn').classList.add('armed');document.getElementById('alarmClock').classList.add('clock-armed');}
+        if(val==="BUZALARM:RINGING")setStatus('Alarm ringing!');
+        if(val==="BUZALARM:STOPPED"){setStatus('Alarm stopped');document.getElementById('armBtn').classList.remove('armed');document.getElementById('alarmClock').classList.remove('clock-armed');}
+      });
+    }catch(_){}
+    // connected UI
+    banner.classList.add('connected');
+    document.getElementById('btDot').innerText='✦';
+    document.getElementById('btLabel').innerText=device.name||'Device connected';
+    document.getElementById('btStatus').innerText='bluetooth active';
+    updateLampUI(true);
+    updateBuzUI();
+    setStatus('Connected');
+  }catch(err){
+    document.getElementById('btStatus').innerText='connection failed — tap to retry';
+    setStatus('Connection failed');
+  }
+}
+
+async function send(msg){
+  if(!btChar)return;
+  await btChar.writeValue(new TextEncoder().encode(msg+"\n"));
+}
+
+// LAMP
+function toggleLamp(){isOn=!isOn;send(isOn?"1":"0");updateLampUI(isOn);}
+function updateLampUI(state){
+  isOn=state;
+  const card=document.getElementById('lampCard');
+  const ts=document.getElementById('toggleState');
+  const fil=document.getElementById('filament');
+  if(isOn){
+    card.classList.add('lamp-on');
+    ts.innerText='On';
+    fil.setAttribute('stroke','rgba(255,220,80,0.9)');
+    setStatus('Light is on');
+  }else{
+    card.classList.remove('lamp-on');
+    ts.innerText='Off';
+    fil.setAttribute('stroke','rgba(255,200,80,0.5)');
+    setStatus('Light is off');
+  }
+}
+
+// TIMER
+function setTimer(type){
+  const h=parseInt(document.getElementById('hh').value)||0;
+  const m=parseInt(document.getElementById('mm').value)||0;
+  const s=parseInt(document.getElementById('ss').value)||0;
+  const total=(h*3600)+(m*60)+s;
+  if(total<=0)return;
+  send(`${type}:${total}`);
+  setStatus(`Turning ${type==='ON'?'on':'off'} in ${total}s`);
+}
+
+// BUZZER
+function updateBuzUI(){
+  const btn=document.getElementById('buzToggle');
+  const wave=document.getElementById('buzWave');
+  if(buzzerEnabledUI){btn.innerText='Buzzer on';btn.classList.add('on');wave.classList.add('buz-active');}
+  else{btn.innerText='Buzzer off';btn.classList.remove('on');wave.classList.remove('buz-active');}
+}
+async function toggleBuzzer(){buzzerEnabledUI=!buzzerEnabledUI;await send(buzzerEnabledUI?"BUZ:1":"BUZ:0");updateBuzUI();}
+async function testBuzzer(){await send("BUZ:TEST");setStatus('Test tone sent');}
+
+// ALARM
+async function armAlarm(){
+  const h=parseInt(document.getElementById('ahh').value)||0;
+  const m=parseInt(document.getElementById('amm').value)||0;
+  const s=parseInt(document.getElementById('ass').value)||0;
+  const total=(h*3600)+(m*60)+s;
+  if(total<=0)return;
+  await send(`BUZ:ALARM:${total}`);
+  setStatus(`Alarm set in ${total}s`);
+  document.getElementById('armBtn').classList.add('armed');
+  document.getElementById('alarmClock').classList.add('clock-armed');
+}
+
+async function stopAlarm(){
+  await send("BUZ:ALARM:STOP");
+  setStatus('Alarm stopped');
+  document.getElementById('armBtn').classList.remove('armed');
+  document.getElementById('alarmClock').classList.remove('clock-armed');
+}
+
+// TV
+async function tvSend(which){
+  await send(`TV:${which}`);
+  document.getElementById('remoteScreen').innerText=`Command · ${which}`;
+  setStatus(`TV: ${which}`);
+}
+async function tvHoldStart(dir){
+  await send(`TV:HOLD:${dir}`);
+  document.getElementById('remoteScreen').innerText=`Vol ${dir==='UP'?'▲':'▼'}`;
+}
+async function tvHoldStop(){
+  await send('TV:HOLD:STOP');
+  document.getElementById('remoteScreen').innerText='TV Ready';
+}
+</script>
+</body>
+</html>
