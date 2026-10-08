@@ -4,7 +4,7 @@ A DIY smart room system built with an **Arduino Nano** and a **web app I built m
 
 🌐 **Live app:** [Open the app](https://adamahmeddd.github.io/smart-room/) (Chrome on Android or PC)
 
-🎥 **Demo video:** [Watch on LinkedIn](LINK-TO-YOUR-POST)
+🎥 **Demo video:** [Watch on LinkedIn](https://lnkd.in/p/enxxHdTk)
 
 <!-- Add a photo or GIF of the setup here -->
 <!-- ![Setup](images/setup.jpg) -->
