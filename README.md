@@ -2,7 +2,7 @@
 
 A DIY smart room system built with an **Arduino Nano** and a **web app I built myself**. The light, the TV and a buzzer alarm can all be controlled **three ways**: from the app over Bluetooth, from an IR remote, or with physical push buttons.
 
-🌐 **Live app:** [Open the app](https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/) (Chrome on Android or PC)
+🌐 **Live app:** [Open the app](https://adamahmeddd.github.io/smart-room/) (Chrome on Android or PC)
 
 🎥 **Demo video:** [Watch on LinkedIn](LINK-TO-YOUR-POST)
 
